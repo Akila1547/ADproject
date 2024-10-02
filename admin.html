@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - ADIPOS</title>
+  <!-- Include your CSS styles here -->
+  <style>
+    /* Add your CSS styles for the admin panel */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+       background: 
+        linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+        url('https://as2.ftcdn.net/v2/jpg/05/74/82/87/1000_F_574828723_yhnkY2dR54hnmo0oyKEtjs1BH3gemOlC.jpg') center/cover no-repeat; /* Add your image URL here */
+     /* background-image: url('https://as2.ftcdn.net/v2/jpg/05/74/82/87/1000_F_574828723_yhnkY2dR54hnmo0oyKEtjs1BH3gemOlC.jpg'); /* Add your image URL here 
+      background-size: center;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: rgba(255, 255, 255, 0.3);*/
+    }
+    .body-mask {
+      background-color: rgba(255, 255, 255, 0.1); /* Adjust the opacity here */
+      padding-top: 200px; /* Adjust padding top for the header height */
+    }
+    header, footer, .container {
+      background-color: rgba(255, 255, 255, 0.7); /* Adjust the opacity here */
+      color: #333; /* Adjust text color */
+    }
+    header {
+      background-color: #47b677;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      z-index: 1; /* Ensure header appears above the body mask */
+    }
+    /*.button-group {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }*/
+    /*.button-group button {
+      background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity here 
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 10px; /* Adjust the space between buttons 
+    }*/
+   button {
+      background-color: #054117;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+   /* .button-group button:hover {
+      background-color: rgba(0, 0, 0, 0.7); /* Adjust the opacity for hover 
+    }*/
+    button:hover {
+      background-color: #b6b3b3;
+    }
+    footer {
+      background-color: #2E8B57;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      z-index: 1; /* Ensure footer appears above the body mask */
+    }
+    .container {
+      padding: 150px;
+      max-width: 400px;
+      margin: auto;
+      margin-bottom: 100px; /* Adjust margin bottom as needed*/ 
+      border-radius: 10px; 
+      margin-top: 20px;
+      position:center;
+      z-index: 2; /* Ensure content appears above the body mask */
+    }
+    p {
+      line-height: 1.6;
+    }
+    
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Administrator Panel</h1>
+</header>
+
+<div class="container">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <label for="adminID">Admin ID:</label>
+    <input type="text" id="adminID" name="adminID" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<footer>
+  <p>&copy; 2024 Alzheimer's Analysis Software. All rights reserved.</p>
+</footer>
+
+<!-- Include your JavaScript code here -->
+<script>
+  // JavaScript code for handling form submission and authentication
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Get the values entered by the user
+    var adminID = document.getElementById('adminID').value;
+    var password = document.getElementById('password').value;
+
+    // Check if the credentials match the predefined ones
+    if (adminID === 'admin' && password === 'password') {
+      // Redirect to the admin dashboard page
+      window.location.href = 'admin_dashboard.html';
+    } else {
+      // If credentials are incorrect, display an error message or handle as needed
+      alert('Invalid credentials. Please try again.');
+    }
+  });
+</script>
+
+
+</body>
+</html>

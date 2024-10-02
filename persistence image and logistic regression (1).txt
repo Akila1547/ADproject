@@ -1,0 +1,113 @@
+!pip install persim matplotlib Pillow pooch PersistenceImages
+!pip install -U cripser
+
+pip install --upgrade pillow
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import cripser as cr
+from skimage import io
+from tkinter import Tk, filedialog
+
+
+ # Set default font family to Arial
+
+# Function to read images from a folder
+def read_images_from_folder(folder_path):
+    images = []
+    for filename in os.listdir(folder_path):
+        img = io.imread(os.path.join(folder_path, filename), as_gray=True)
+        images.append(img)
+    return images
+
+# Manually select folders using a GUI
+def select_folders():
+    root = Tk()
+    root.withdraw()  # Hide the main window
+    folder_paths = []
+    for _ in range(3):
+        folder_path = filedialog.askdirectory(title='Select a folder')
+        folder_paths.append(folder_path)
+    return folder_paths
+
+# Read images from selected folders
+folder_paths = select_folders()
+images = []
+labels = []
+
+for i, folder_path in enumerate(folder_paths):
+    folder_images = read_images_from_folder(folder_path)
+    images.extend(folder_images)
+    labels.extend([i+1] * len(folder_images))
+
+# Convert images to numpy array
+# Compute persistence diagrams
+persistence_diagrams = [cr.computePH(img) for img in images]
+
+pd=persistence_diagrams[0]
+pds = [pd[pd[:,0] == i] for i in range(3)]
+print("Betti numbers: ",[len(pds[i]) for i in range(len(pds))])
+
+
+
+
+import persim
+import matplotlib.pyplot as plt
+
+for i, pd in enumerate(persistence_diagrams):
+    pds = [pd[pd[:,0] == i] for i in range(3)]
+    print("Betti numbers:", [len(pds[i]) for i in range(len(pds))])
+    plt.figure()  # Create a new figure for each diagram
+    persim.plot_diagrams([p[:,1:3] for p in pds], title=f'V-construction - Diagram {i+1}')
+    plt.show()  # Show the plot for the current diagram
+
+
+diagram_0=[]
+diagram_1=[]
+diagram_0 = [pd[pd[:,0] == 0][:, 1:3] for pd in persistence_diagrams]
+diagram_1 = [pd[pd[:,0] == 1][:, 1:3] for pd in persistence_diagrams]
+from persim.persistent_entropy import *
+from scipy import stats
+e0 = [persistent_entropy(pd) for pd in diagram_0]
+
+# Compute entropy for each diagram in diagram_1
+e1 = [persistent_entropy(pd) for pd in diagram_1]
+
+# Print entropy values
+print("Entropy of diagrams in diagram_0:", e0)
+print("Entropy of diagrams in diagram_1:", e1)
+e0_list = [entropy[0] for entropy in e0]
+e1_list = [entropy[0] for entropy in e1]
+
+# Print entropy values as lists
+print("Entropy of diagrams in diagram_0:", e0_list)
+print("Entropy of diagrams in diagram_1:", e1_list)
+labels=np.array(labels)
+from persim import PersImage
+from persim import PersistenceImager
+from sklearn import datasets
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+pimgr = PersistenceImager(pixel_size=3)
+pimgr.fit(diagram_1)
+imgs = pimgr.transform(diagram_1)
+print(pimgr)
+imgs_array = np.array([img.flatten() for img in imgs])
+plt.figure(figsize=(15,7.5))
+
+for i in range(4):
+    ax = plt.subplot(240+i+1)
+    pimgr.plot_image(imgs[i+10], ax)
+    plt.title("PI of $H_1$ for  mild")
+
+for i in range(4):
+    ax = plt.subplot(240+i+5)
+    pimgr.plot_image(imgs[-(i+1)], ax)
+    plt.title("PI of $H_1$ for moderte")
+X_train, X_test, y_train, y_test = train_test_split(imgs_array, labels, test_size=0.25, random_state=1)
+lr = LogisticRegression()
+lr.fit(X_train, y_train)
+prediction=lr.predict(X_test)
+from sklearn.metrics import accuracy_score, confusion_matrix
+accuracy_score=accuracy_score(y_test, prediction)
+print(accuracy_score)

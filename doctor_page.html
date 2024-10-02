@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Alzheimer's Disease Analysis Software (ADIPOS)-Doctor Dashboard</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+             background: 
+              linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+              url('https://as2.ftcdn.net/v2/jpg/05/74/82/87/1000_F_574828723_yhnkY2dR54hnmo0oyKEtjs1BH3gemOlC.jpg') center/cover no-repeat; /* Add your image URL here */
+           /* background-image: url('https://as2.ftcdn.net/v2/jpg/05/74/82/87/1000_F_574828723_yhnkY2dR54hnmo0oyKEtjs1BH3gemOlC.jpg'); /* Add your image URL here 
+            background-size: center;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: rgba(255, 255, 255, 0.3);*/
+          }
+          .body-mask {
+            background-color: rgba(255, 255, 255, 0.1); /* Adjust the opacity here */
+            padding-top: 200px; /* Adjust padding top for the header height */
+          }
+          header, footer, .container {
+            background-color: rgba(255, 255, 255, 0.7); /* Adjust the opacity here */
+            color: #333; /* Adjust text color */
+          }
+          header {
+            background-color: #47b677;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1; /* Ensure header appears above the body mask */
+          }
+          /*.button-group {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+          }*/
+          /*.button-group button {
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity here 
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px; /* Adjust the space between buttons 
+          }*/
+         button {
+            background-color: #054117;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+          }
+         /* .button-group button:hover {
+            background-color: rgba(0, 0, 0, 0.7); /* Adjust the opacity for hover 
+          }*/
+          button:hover {
+            background-color: #b6b3b3;
+          }
+          footer {
+            background-color: #2E8B57;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            z-index: 1; /* Ensure footer appears above the body mask */
+          }
+          .container {
+            padding: 100px;
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 100px; /* Adjust margin bottom as needed*/ 
+            border-radius: 10px; 
+            margin-top: 20px;
+            position: center;
+            z-index: 2; /* Ensure content appears above the body mask */
+          }
+          p {
+            line-height: 1.6;
+          }
+          .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 200px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    } 
+        </style>
+      </head>
+      <body>
+
+        <header>
+          <h1>Alzheimer's Disease Analysis Software (ADIPOS)</h1>
+          </header>
+          <div class="container">
+            <div class="header">
+                <h1>Doctor Dashboard</h1>
+                <div class="user-info">
+                    <p>Doctor Name: John Doe</p>
+                    <p>Doctor ID: 123456</p>
+                </div>
+            </div>
+        
+        
+        <div class="dropdown">
+            <button class="dropbtn">View Schedule</button>
+            <div class="dropdown-content">
+                <table id="schedule">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Appointment Date</th>
+                            <th>Appointment Time</th>
+                            <th>Scan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>Emma Smith</td>
+                            <td>35</td>
+                            <td>Female</td>
+                            <td>2024-02-25</td>
+                            <td>10:00 AM</td>
+                            <td><a href="#">Scan</a></td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+        
+        <footer>
+          <p>&copy; 2024 Alzheimer's Analysis Software. All rights reserved.</p>
+        </footer>
+        
+        </body>
+</html>

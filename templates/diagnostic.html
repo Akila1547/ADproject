@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alzheimer's Disease Analysis Software (ADIPOS)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: 
+        linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+        url('https://as2.ftcdn.net/v2/jpg/05/74/82/87/1000_F_574828723_yhnkY2dR54hnmo0oyKEtjs1BH3gemOlC.jpg') center/cover no-repeat;
+    }
+    .body-mask {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding-top: 200px;
+    }
+    header, footer, .container {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #333;
+    }
+    header {
+      background-color: #47b677;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      z-index: 1;
+    }
+    button {
+      background-color: #054117;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b6b3b3;
+    }
+    footer {
+      background-color: #2E8B57;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      z-index: 1;
+    }
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      margin-bottom: 100px;
+      border-radius: 10px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    p {
+      line-height: 1.6;
+    }
+    #drop-area {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+    #drop-area.highlight {
+      border-color: purple;
+    }
+    #gallery {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    #gallery img {
+      width: 150px;
+      height: auto;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .delete-btn {
+      background-color: #ff5c5c;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    .file-name {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    .plot-container {
+      margin-top: 20px;
+    }
+    .plot {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Alzheimer's Disease Analysis Software (ADIPOS)</h1>
+  <div class="button-group">
+    <button id="inputScanBtn">Input Scan</button>
+    <button id="generateBarcodeBtn" style="display: none;">Generate Barcode</button>
+    <button id="possibilityBtn" style="display: none;">Possibility</button>
+  </div>
+  <input type="file" id="fileInput" style="display: none;" multiple>
+</header>
+<div class="body-mask">
+  <div class="container">
+    <div id="drop-area">
+      <p id="drop-text">Drag and drop images here or click to select from folder.</p>
+    </div>
+    <div id="gallery"></div>
+    <div class="plot-container">
+      <div id="v-constructionDiagram" class="plot"></div>
+      <div id="t-constructionDiagram" class="plot"></div>
+    </div>
+    <p id="bettiNumbers"></p>
+    <p id="result"></p> <!-- Added paragraph for displaying the result -->
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Alzheimer's Analysis Software. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  const dropArea = document.getElementById('drop-area');
+  const dropText = document.getElementById('drop-text');
+  const gallery = document.getElementById('gallery');
+  const fileInput = document.getElementById('fileInput');
+
+  dropArea.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  // Prevent default behavior (Prevent file from being opened)
+  dropArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropArea.classList.add('highlight');
+    dropText.textContent = 'Drop to upload';
+  });
+
+  dropArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    dropArea.classList.remove('highlight');
+    dropText.textContent = 'Drag and drop images here or click to select from folder.';
+  });
+
+  dropArea.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropArea.classList.remove('highlight');
+    dropText.textContent = 'Drag and drop images here or click to select from folder.';
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+  });
+
+  document.getElementById("inputScanBtn").addEventListener("click", function() {
+    document.getElementById("fileInput").click();
+  });
+
+  document.getElementById("fileInput").addEventListener("change", function(event) {
+    const files = event.target.files;
+    handleFiles(files);
+  });
+
+  function handleFiles(files) {
+    for (const file of files) {
+      if (file.type.startsWith('image/')) {
+        const imgContainer = document.createElement('div');
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        imgContainer.appendChild(img);
+        const fileName = document.createElement('p');
+        fileName.classList.add('file-name');
+        fileName.textContent = file.name;
+        imgContainer.appendChild(fileName);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'X';
+        deleteBtn.classList.add('delete-btn');
+        deleteBtn.addEventListener('click', function() {
+          imgContainer.remove();
+        });
+        imgContainer.appendChild(deleteBtn);
+        gallery.appendChild(imgContainer);
+      }
+    }
+    // Once the scan is input, display the other buttons.
+    document.getElementById("generateBarcodeBtn").style.display = "inline-block";
+    document.getElementById("possibilityBtn").style.display = "inline-block";
+  }
+  // Add event listener for "Generate Barcode" button
+  document.getElementById("generateBarcodeBtn").addEventListener("click", function() {
+    // Get the selected files
+    const files = document.getElementById("fileInput").files;
+    // Create FormData object
+    const formData = new FormData();
+    // Append files to FormData object
+    for (const file of files) {
+      formData.append('images', file);
+    }
+
+    // Send POST request to the Flask server
+    fetch('/generate_persistence_diagram', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle response data
+        console.log(data);
+        plotPersistenceDiagram(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  });
+  
+  
+
+  function plotPersistenceDiagram(data) {
+    const pd_v_construction = data.pd_v_construction;
+    const pd_t_construction = data.pd_t_construction;
+    const betti_numbers_v = data.betti_numbers_v;
+    const betti_numbers_t = data.betti_numbers_t;
+    const result = data.result;
+
+    // Plot persistence diagrams using Plotly.js
+    Plotly.newPlot('v-constructionDiagram', [{
+        x: pd_v_construction.map(point => point[1]),
+        y: pd_v_construction.map(point => point[2]),
+        mode: 'markers',
+        type: 'scatter',
+        name: 'V-construction',
+        marker: { color: 'blue' }
+    }], {
+        title: 'V-Construction Persistence Diagram',
+        xaxis: { title: 'Birth' },
+        yaxis: { title: 'Death' }
+    });
+
+    Plotly.newPlot('t-constructionDiagram', [{
+        x: pd_t_construction.map(point => point[1]),
+        y: pd_t_construction.map(point => point[2]),
+        mode: 'markers',
+        type: 'scatter',
+        name: 'T-construction',
+        marker: { color: 'red' }
+    }], {
+        title: 'T-Construction Persistence Diagram',
+        xaxis: { title: 'Birth' },
+        yaxis: { title: 'Death' }
+    });
+
+    // Display Betti numbers and result
+    const bettiNumbersElement = document.getElementById('bettiNumbers');
+    bettiNumbersElement.textContent = `Betti numbers (V-construction): ${betti_numbers_v.join(', ')} | Betti numbers (T-construction): ${betti_numbers_t.join(', ')}`;
+
+    // Display result
+    const resultElement = document.getElementById('result');
+    resultElement.textContent = `Result: ${result}`;
+  }
+
+</script>
+</body>
+</html>
